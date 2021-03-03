@@ -18,7 +18,6 @@ export function Login() {
   const { push } = useHistory();
 
   const handleFacebookLoginClick = () => {
-    
     window.open(
       "https://stark-garden-96861.herokuapp.com/auth/facebook",
       "_self"
@@ -37,6 +36,7 @@ export function Login() {
         },
         withCredentials: true,
         headers: {
+          sameOrigin: "None",
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Credentials": true,
