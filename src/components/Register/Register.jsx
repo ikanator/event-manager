@@ -17,7 +17,8 @@ export function Register() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
 
-  const register = async () => {
+  const register = async (event) => {
+    event.preventDefault();
     const { data: { user, success } = {} } = await axios({
       method: "POST",
       url: "https://stark-garden-96861.herokuapp.com/auth/create",
