@@ -36,7 +36,6 @@ export function Login() {
         },
         withCredentials: true,
         headers: {
-          sameOrigin: "None",
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Credentials": true,
