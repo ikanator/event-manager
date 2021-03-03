@@ -8,7 +8,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const checkSession = async () => {
-      const data = await axios({
+      const { data: { user, success } = {} } = await axios({
         method: "GET",
         url: `https://stark-garden-96861.herokuapp.com/auth/facebook/success`,
         withCredentials: true,
@@ -19,10 +19,9 @@ export const UserProvider = ({ children }) => {
         },
       });
 
-      // if (user && status === 200) {
-      //   setUser(user);
-      // }
-      console.log(data);
+      if (user && success) {
+        setUser(user);
+      }
     };
 
     checkSession();
