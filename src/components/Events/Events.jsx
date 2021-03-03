@@ -7,6 +7,7 @@ const getCount = (event) => event.participants.length;
 const getLeftCount = (event) => 12 - getCount(event);
 
 export const Events = () => {
+  const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([]);
   const [currentEvent, setCurrentEvent] = useState();
   const { user } = useContext(UserContext);
@@ -28,6 +29,7 @@ export const Events = () => {
 
   const removeMe = async (event) => {
     const eventId = event._id;
+    setLoading(true);
 
     const { data } = await axios({
       method: "POST",
@@ -40,10 +42,12 @@ export const Events = () => {
       },
     });
     setEvents(data);
+    setLoading(false);
   };
 
   const addMe = async (event) => {
     const eventId = event._id;
+    setLoading(true);
 
     const { data } = await axios({
       method: "POST",
@@ -56,6 +60,7 @@ export const Events = () => {
       },
     });
     setEvents(data);
+    setLoading(false);
   };
 
   if (!events.length) return null;
@@ -94,6 +99,7 @@ export const Events = () => {
                   onClick={() =>
                     getMe(event) ? removeMe(event) : addMe(event)
                   }
+                  disabled={loading}
                 >
                   {getMe(event) ? "Атмєна" : "Вітьок, запиши мене"}
                 </Button>
