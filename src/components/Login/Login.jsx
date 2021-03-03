@@ -43,6 +43,9 @@ export function Login() {
       });
       if (data.user && status === 200) {
         push("/");
+      } else {
+        setEmail("");
+        setPassword("");
       }
     } catch (err) {
       console.log(err);

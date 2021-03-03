@@ -7,16 +7,18 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 export function Register() {
+  const { push } = useHistory();
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
 
   const register = async () => {
-    const { data } = await axios({
+    const { data: { user, success } = {} } = await axios({
       method: "POST",
       url: "https://stark-garden-96861.herokuapp.com/auth/create",
       data: {
@@ -26,7 +28,14 @@ export function Register() {
         password,
       },
     });
-    console.log(data);
+    if (user && success) {
+      push("/login");
+    } else {
+      setUsername("");
+      setPassword("");
+      setFirstName("");
+      setLastName("");
+    }
   };
 
   return (
@@ -86,7 +95,7 @@ export function Register() {
                     </div>
                   </FormGroup>
                   <FormGroup className="row justify-content-center px-3">
-                    <div className="col-3 px-3">
+                    <div className="col-3 col-sm-12 px-3">
                       <Button
                         type="submit"
                         className="btn-block btn-info"

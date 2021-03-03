@@ -63,7 +63,7 @@ export const Events = () => {
   return (
     <>
       <div className="bg-info h-100">
-        <Container className="h-100 p-5">
+        <Container className="h-100 p-3">
           {events.map((event) => (
             <Card key={event._id}>
               <Card.Body>
