@@ -20,6 +20,10 @@
     "react-scripts": "4.0.2",
     "web-vitals": "^1.0.1"
   },
+  "engines": {
+    "npm": "6.14.8",
+    "node": "14.5.0"
+  },
   "scripts": {
     "start": "PORT=3006 react-scripts start ",
     "build": "react-scripts build",
