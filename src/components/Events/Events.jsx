@@ -14,7 +14,7 @@ export const Events = () => {
 
   useEffect(() => {
     if (user) {
-      fetch("https://stark-garden-96861.herokuapp.com/events")
+      fetch(`${process.env.REACT_APP_API_URL}/events`)
         .then((res) => res.json())
         .then((responseJson) => setEvents(responseJson))
         .catch((error) => console.error(error));
@@ -25,7 +25,7 @@ export const Events = () => {
   const handleShow = (event) => setCurrentEvent(event);
 
   const getMe = (event) =>
-    event.participants.find((participant) => participant._id === user._id);
+    event.participants.find((participant) => participant._id === user.userId);
 
   const removeMe = async (event) => {
     const eventId = event._id;
@@ -33,7 +33,8 @@ export const Events = () => {
 
     const { data } = await axios({
       method: "POST",
-      url: `https://stark-garden-96861.herokuapp.com/events/${eventId}/removeMe`,
+      url: `${process.env.REACT_APP_API_URL}/events/${eventId}/removeMe`,
+      data: { userId: user.userId },
       withCredentials: true,
       headers: {
         Accept: "application/json",
@@ -51,7 +52,8 @@ export const Events = () => {
 
     const { data } = await axios({
       method: "POST",
-      url: `https://stark-garden-96861.herokuapp.com/events/${eventId}/addMe`,
+      data: { userId: user.userId },
+      url: `${process.env.REACT_APP_API_URL}/events/${eventId}/addMe`,
       withCredentials: true,
       headers: {
         Accept: "application/json",

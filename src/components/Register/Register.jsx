@@ -21,7 +21,7 @@ export function Register() {
     event.preventDefault();
     const { data: { user, success } = {} } = await axios({
       method: "POST",
-      url: "https://stark-garden-96861.herokuapp.com/auth/create",
+      url: `${process.env.REACT_APP_API_URL}/auth/create`,
       data: {
         username,
         firstName,

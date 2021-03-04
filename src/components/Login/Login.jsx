@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createRef, useRef } from "react";
 import {
   Container,
   Row,
@@ -13,26 +13,24 @@ import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
 
 export function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const emailRef = createRef();
+  const passwordRef = createRef();
   const { push } = useHistory();
 
   const handleFacebookLoginClick = () => {
-    window.open(
-      "https://stark-garden-96861.herokuapp.com/auth/facebook",
-      "_self"
-    );
+    window.open(`${process.env.REACT_APP_API_URL}/auth/facebook`, "_self");
   };
 
   const handleLocalLoginClick = async (event) => {
     event.preventDefault();
     try {
-      const { data, status } = await axios({
+      console.log(emailRef.current.value, passwordRef.current.value);
+      const { data } = await axios({
         method: "POST",
-        url: `https://stark-garden-96861.herokuapp.com/auth/local`,
+        url: `${process.env.REACT_APP_API_URL}/auth/local`,
         data: {
-          email,
-          password,
+          email: emailRef?.current?.value,
+          password: passwordRef?.current?.value,
         },
         withCredentials: true,
         headers: {
@@ -41,19 +39,19 @@ export function Login() {
           "Access-Control-Allow-Credentials": true,
         },
       });
-      if (data.user && status === 200) {
+      if (data?.userId && data?.tokenId) {
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("tokenId", data.tokenId);
+
         push("/");
       } else {
-        setEmail("");
-        setPassword("");
+        emailRef.current.value = "";
+        passwordRef.current.value = "";
       }
     } catch (err) {
       console.log(err);
     }
   };
-
-  const handleEmailChange = (event) => setEmail(event.target.value);
-  const handlePasswordChange = (event) => setPassword(event.target.value);
 
   return (
     <div className="bg-info h-100">
@@ -71,9 +69,9 @@ export function Login() {
                   <FormGroup className="row justify-content-center px-3">
                     <div className="col-9 px-0">
                       <FormControl
-                        type="text"
-                        onChange={handleEmailChange}
-                        placeholder="Ім'я користувача"
+                        ref={emailRef}
+                        type="email"
+                        placeholder="Email"
                         className="border-info"
                       />
                     </div>
@@ -81,7 +79,7 @@ export function Login() {
                   <FormGroup className="row justify-content-center px-3">
                     <div className="col-9 px-0">
                       <FormControl
-                        onChange={handlePasswordChange}
+                        ref={passwordRef}
                         type="password"
                         className="border-info"
                       />

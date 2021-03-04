@@ -5,11 +5,15 @@ import { Register } from "../Register/Register";
 import { Events } from "../Events/Events";
 import { AuthenticatedRoute } from "../AuthenticatedRoute/AuthenticatedRoute";
 import { UserProvider } from "../../providers/UserProvider";
+import { Authenticated } from "../Authenticated/Authenticated";
 
 function App() {
   return (
     <Router>
       <Switch>
+        <Route path="/authenticated">
+          <Authenticated />
+        </Route>
         <Route path="/register">
           <Register />
         </Route>
