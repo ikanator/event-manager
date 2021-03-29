@@ -1,4 +1,4 @@
-import React, { createRef, useRef } from "react";
+import React, { createRef } from "react";
 import {
   Container,
   Row,
@@ -24,7 +24,6 @@ export function Login() {
   const handleLocalLoginClick = async (event) => {
     event.preventDefault();
     try {
-      console.log(emailRef.current.value, passwordRef.current.value);
       const { data } = await axios({
         method: "POST",
         url: `${process.env.REACT_APP_API_URL}/auth/local`,

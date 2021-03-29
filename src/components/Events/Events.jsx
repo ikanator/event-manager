@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Container, Card, Button, Modal, ListGroup } from "react-bootstrap";
+import {
+  Container,
+  Card,
+  Button,
+  Modal,
+  ListGroup,
+  Spinner,
+} from "react-bootstrap";
 import axios from "axios";
 import { UserContext } from "../../providers/UserProvider";
 
@@ -8,16 +15,24 @@ const getLeftCount = (event) => 12 - getCount(event);
 
 export const Events = () => {
   const [loading, setLoading] = useState(false);
+  const [eventLoading, setEventLoading] = useState(false);
   const [events, setEvents] = useState([]);
   const [currentEvent, setCurrentEvent] = useState();
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (user) {
+      setLoading(true);
       fetch(`${process.env.REACT_APP_API_URL}/events`)
         .then((res) => res.json())
-        .then((responseJson) => setEvents(responseJson))
-        .catch((error) => console.error(error));
+        .then((responseJson) => {
+          setEvents(responseJson);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);
+        });
     }
   }, [user]);
 
@@ -29,7 +44,7 @@ export const Events = () => {
 
   const removeMe = async (event) => {
     const eventId = event._id;
-    setLoading(true);
+    setEventLoading(true);
 
     const { data } = await axios({
       method: "POST",
@@ -43,12 +58,12 @@ export const Events = () => {
       },
     });
     setEvents(data);
-    setLoading(false);
+    setEventLoading(false);
   };
 
   const addMe = async (event) => {
     const eventId = event._id;
-    setLoading(true);
+    setEventLoading(true);
 
     const { data } = await axios({
       method: "POST",
@@ -62,10 +77,16 @@ export const Events = () => {
       },
     });
     setEvents(data);
-    setLoading(false);
+    setEventLoading(false);
   };
 
-  if (!events.length) return null;
+  if (loading) {
+    return (
+      <div className="h-100 d-flex justify-content-center align-items-center bg-info">
+        <Spinner animation="grow" className="text-warning" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -101,7 +122,7 @@ export const Events = () => {
                   onClick={() =>
                     getMe(event) ? removeMe(event) : addMe(event)
                   }
-                  disabled={loading}
+                  disabled={eventLoading}
                 >
                   {getMe(event) ? "Атмєна" : "Вітьок, запиши мене"}
                 </Button>
