@@ -1,14 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import {
-  Container,
-  Card,
-  Button,
-  Modal,
-  ListGroup,
-  Spinner,
-} from "react-bootstrap";
+import { Container, Card, Button } from "react-bootstrap";
 import axios from "axios";
 import { UserContext } from "../../providers/UserProvider";
+import { FullPageSpinner } from "../FullPageSpinner/FullPageSpinner";
+import { EventModal } from "../EventModal/EventModal";
 
 const getCount = (event) => event.participants.length;
 const getLeftCount = (event) => 12 - getCount(event);
@@ -81,16 +76,12 @@ export const Events = () => {
   };
 
   if (loading) {
-    return (
-      <div className="h-100 d-flex justify-content-center align-items-center bg-info">
-        <Spinner animation="grow" className="text-warning" />
-      </div>
-    );
+    return <FullPageSpinner />;
   }
 
   return (
     <>
-      <div className="bg-info h-100">
+      <div className="bg-info flex-column flex-grow-1">
         <Container className="h-100 p-3">
           {events.map((event) => (
             <Card key={event._id}>
@@ -131,25 +122,7 @@ export const Events = () => {
           ))}
         </Container>
       </div>
-      <Modal show={typeof currentEvent === "object"} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Хто приймає участь</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ListGroup variant="flush">
-            {currentEvent?.participants?.map((participant) => (
-              <ListGroup.Item key={participant._id}>
-                {participant.firstName} {participant.lastName}
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Закрити
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <EventModal onClose={handleClose} event={currentEvent} />
     </>
   );
 };
